@@ -7,14 +7,15 @@ import backtype.storm.topology.TopologyBuilder;
 import com.dianping.cosmos.bolt.PrinterBolt;
 
 public class BlackholeBlockingQueueSpoutTest {
-    private static String TOPIC = "testblackhole2";
+    //private static String TOPIC = "testblackhole2";
+    private static String TOPIC = "dpods_log_midas-counting-web";
     private static String SPOUT_ID = "Test";
     
     public static void main(String[] args){
         TopologyBuilder builder = new TopologyBuilder();
 
         builder.setSpout(SPOUT_ID, 
-                new BlackholeBlockingQueueSpout(TOPIC, "StormCluster", 200), 1);
+                new BlackholeBlockingQueueSpout(TOPIC, "StormCluster", 2), 1);
         builder.setBolt("Print", new PrinterBolt(), 1).shuffleGrouping(SPOUT_ID, TOPIC);        
         
         Config conf = new Config();

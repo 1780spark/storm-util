@@ -73,6 +73,7 @@ public class BlackholeBlockingQueueSpout implements IRichSpout {
         offsetStrategy  = new StormOffsetStrategy();
         offsetStrategy.setConsumerGroup(group);
         offsetStrategy.setSyncFrequency(syncFrequency);
+        offsetStrategy.setTopic(topic);
         
         consumer = new Consumer(topic, group, config, offsetStrategy);
 
@@ -111,7 +112,7 @@ public class BlackholeBlockingQueueSpout implements IRichSpout {
             Utils.sleep(100);
             warnningStep++;
             if (warnningStep % 100 == 0) {
-                LOG.warn("Queue is empty, cannot poll message.");
+                LOG.info("Queue is empty, cannot poll message.");
             }
         }
     }
