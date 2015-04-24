@@ -85,7 +85,6 @@ public class SwallowSpout implements IRichSpout {
     public void ack(Object msgId) {
         LOG.debug("ack: " + msgId);
         waitingForAck.remove(msgId);
-
     }
 
     @Override
