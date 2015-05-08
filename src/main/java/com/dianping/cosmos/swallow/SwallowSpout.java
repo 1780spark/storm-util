@@ -69,7 +69,7 @@ public class SwallowSpout implements IRichSpout {
     public void nextTuple() {
         Message message = listener.pollMessage();
         if (message != null) {
-            collector.emit(topic, new Values(message.getContent()), message.getMessageId());
+            collector.emit(topic, new Values(message.getContent(), message.getProperties(), message.getType()), message.getMessageId());
             waitingForAck.put(message.getMessageId(), message);
         }
         else{
@@ -91,12 +91,12 @@ public class SwallowSpout implements IRichSpout {
     public void fail(Object msgId) {
         LOG.info("fail: " + msgId);
         Message message = waitingForAck.get(msgId);
-        collector.emit(topic, new Values(message.getContent()), message.getMessageId());
+        collector.emit(topic, new Values(message.getContent(), message.getProperties(), message.getType()), message.getMessageId());
     }
 
     @Override
     public void declareOutputFields(OutputFieldsDeclarer declarer) {
-        declarer.declareStream(topic, new Fields("event"));
+        declarer.declareStream(topic, new Fields("content", "properties", "type"));
     }
 
     @Override
