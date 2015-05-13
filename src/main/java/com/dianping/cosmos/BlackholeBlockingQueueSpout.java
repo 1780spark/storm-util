@@ -87,15 +87,17 @@ public class BlackholeBlockingQueueSpout implements IRichSpout {
     @Override
     public void close() {
         fetchThread.shutdown();
+        offsetStrategy.syncOffset();
     }
 
     @Override
     public void activate() {
-        
+        new Thread(fetchThread).start();
     }
 
     @Override
     public void deactivate() {
+        fetchThread.shutdown();
         offsetStrategy.syncOffset();
     }
 
