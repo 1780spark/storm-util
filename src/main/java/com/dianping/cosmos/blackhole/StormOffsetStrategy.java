@@ -41,7 +41,8 @@ public class StormOffsetStrategy implements OffsetStrategy {
     
     public long getOffset(String topic, String partition, long endOffset, long committedOffset) {
         try {
-            String offsetValue = dpRedis.hget(TABLE_NAME, getKey(topic), partition);
+            String key = getKey(topic);
+            String offsetValue = dpRedis.hget(TABLE_NAME, key, partition);
             if(offsetValue != null){
                  long offset = Long.valueOf(offsetValue) ;
                  if(offset > endOffset){
@@ -49,11 +50,14 @@ public class StormOffsetStrategy implements OffsetStrategy {
                              + "'s endOffset less than redis offset value, use endOffset instead!");
                      return endOffset;
                  }
+                 LOG.info("get offset form redis, topic = " + topic 
+                         + ", partition = " + partition + ", offset = " + offset);
                  return offset;
             }
-            return committedOffset;
+            LOG.info("offset not in fail, topic = " + topic 
+                    + ", partition = " + partition + ", use committedOffset, value = " + committedOffset);
         } catch (Exception e) {
-            LOG.error("get topic = " + topic + ", partition = " + partition 
+            LOG.error("get offset form redis error, topic = " + topic + ", partition = " + partition 
                     + " offset error, use committedOffset!", e);
         }
         return committedOffset;
@@ -62,7 +66,9 @@ public class StormOffsetStrategy implements OffsetStrategy {
     public void syncOffset(){
         try {
             if(offsetMap.size() > 0){
-                dpRedis.hset(TABLE_NAME, getKey(topic), offsetMap, EXPIRE);
+                String key = getKey(topic);
+                dpRedis.hset(TABLE_NAME, key, offsetMap, EXPIRE);
+                LOG.info("sync offset 2 redis, topic = " + topic + ", value = " + offsetMap);
                 //写入成功后，重置
                 offsetMap = new HashMap<String, String>();
                 syncCounter = 0;
