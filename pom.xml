@@ -48,12 +48,12 @@
 		<dependency>
 			<groupId>com.dianping.cat</groupId>
 			<artifactId>cat-core</artifactId>
-			<version>1.2.7</version>
+			<version>1.3.4</version>
 		</dependency>
 		<dependency>
 			<groupId>com.dianping.puma</groupId>
 			<artifactId>puma-client</artifactId>
-			<version>1.0.0-SNAPSHOT</version>
+			<version>0.2.1</version>
 		</dependency>
 		<dependency>
 			<groupId>log4j</groupId>
@@ -100,6 +100,14 @@
 					</execution>
 				</executions>
 			</plugin>
+			<plugin>
+		        <groupId>org.apache.maven.plugins</groupId>
+		        <artifactId>maven-compiler-plugin</artifactId>
+		        <configuration>
+		          <source>1.6</source>
+		          <target>1.6</target>
+		        </configuration>
+      		</plugin>
 		</plugins>
 	</build>
 	<distributionManagement>

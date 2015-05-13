@@ -19,7 +19,7 @@ import backtype.storm.tuple.Values;
 import com.dianping.puma.api.ConfigurationBuilder;
 import com.dianping.puma.api.EventListener;
 import com.dianping.puma.api.PumaClient;
-import com.dianping.puma.core.event.Event;
+import com.dianping.puma.core.event.ChangedEvent;
 import com.dianping.puma.core.event.RowChangedEvent;
 
 @SuppressWarnings("rawtypes")
@@ -62,7 +62,7 @@ public class PumaSpout implements IRichSpout{
     class PumaEventListener implements EventListener {
 
         @Override
-        public void onEvent(Event event) throws Exception {
+        public void onEvent(ChangedEvent event) throws Exception {
             if (!(event instanceof RowChangedEvent)) {
                 LOG.error("received event " + event +" which is not a RowChangedEvent");
                 return;
@@ -81,18 +81,14 @@ public class PumaSpout implements IRichSpout{
         }
 
         @Override
-        public void onSkipEvent(Event event) {
+        public void onSkipEvent(ChangedEvent event) {
             
         }
 
       
         @Override
-        public boolean onException(Event event, Exception e) {
+        public boolean onException(ChangedEvent event, Exception e) {
             return false;
-        }
-
-        @Override
-        public void onHeartbeatEvent(Event event) {            
         }
         
     }
