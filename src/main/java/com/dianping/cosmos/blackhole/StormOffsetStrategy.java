@@ -54,7 +54,7 @@ public class StormOffsetStrategy implements OffsetStrategy {
                          + ", partition = " + partition + ", offset = " + offset);
                  return offset;
             }
-            LOG.info("offset not in fail, topic = " + topic 
+            LOG.info("offset not in redis, topic = " + topic 
                     + ", partition = " + partition + ", use committedOffset, value = " + committedOffset);
         } catch (Exception e) {
             LOG.error("get offset form redis error, topic = " + topic + ", partition = " + partition 
